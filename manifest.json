@@ -4,13 +4,13 @@
     "version": "1.0",
     "description": "Easily add memes from all over the internet to your dorp-board",
     "icons": {
-        "128": "icon128.png",
-        "48": "icon48.png",
-        "16": "icon16.png"
+        "128": "LogoGlow128.png",
+        "48": "LogoGlow48.png",
+        "16": "LogoGlow16.png"
     },
 
     "page_action": {
-        "default_icon": "icon16.png",
+        "default_icon": "LogoGlow16.png",
         "default_popup": "popup.html",
         "default_title": "MemeDropExtension"
     },
