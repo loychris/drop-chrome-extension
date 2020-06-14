@@ -1,3 +1,16 @@
-h1 {
-    font-family: Verdana;
+.drop-area-container {
+    position: relative;
+}
+
+.drop-area{
+    position: absolute;
+    left: 520px; 
+    top: 0px;
+    height: 250px;
+    width: 120px; 
+    background-color: red;
+}
+
+article {
+    border: 1px solid red; 
 }

@@ -1,7 +1,5 @@
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
-    if( request.todo == "showPageAction" ){
-        chrome.tabs.query({active:true}, function(tabs){
-            chrome.pageAction.show(tabs[0].id);
-        });
-    }
+chrome.contextMenus.create({
+    "id": "addImageToStream2",
+    "title": "Add to Stream",
+    "contexts": ["selection"]
 });
