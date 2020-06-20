@@ -8,9 +8,30 @@
     top: 0px;
     height: 250px;
     width: 120px; 
-    background-color: red;
 }
 
-article {
-    border: 1px solid red; 
+.dropOptionContainer{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    max-height: 38px; 
+    margin-bottom: 5px; 
+    cursor: pointer;
+    padding-top: 1px; 
+    padding-bottom: 1px; 
+    padding-left: 5px; 
+    padding-right: 10px; 
+    border: 1px solid hsla(0,0%,100%,.3);
+    border-radius: 3px; 
+    font-size: 10pt; 
+    background-color: #121218;
+    color: #c0c0c0; 
+}
+
+.dropLogo{
+    margin-right: 3px; 
+}
+
+.dropButton{
+    cursor: pointer; 
 }
