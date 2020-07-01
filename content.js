@@ -3,12 +3,26 @@
 
 if(window.location.href.startsWith("https://9gag.com/")){
 
-    const saveToStream = (id) => { console.log(`Saving ${id} to Stream`) }
-    const saveToStreamWithTitle = (id) => { console.log(`Saving ${id} to Stream with title`) }
-    const saveForIg = (id) => { console.log(`Saving ${id} for Instagram`) }
-    const saveForIgStory = (id) => { console.log(`Saving ${id} for Instagram Story`) }
-    const saveForTumblr = (id) => { console.log(`Saving ${id} for Tumblr`) }
-    const saveForTwitter = (id) => { console.log(`Saving ${id} for Twitter`) }
+    const saveToDestination = (id, destination) => { 
+        console.log(`Saving ${id} to Stream`);
+        $(`#${destination}_${id}`).css("border", "1px solid #ffffff");
+        $(`#${destination}_${id}`).css("font-weight", "bold");
+        $(`#${destination}_${id}`).css("color", "#ffffff");
+        $(`#icon_${destination}_${id}`).remove();
+        let icon;
+        switch(destination){
+            case 'stream': 
+            case 'streamt': icon = 'drop';break; 
+            case 'instagram':
+            case 'igStory': icon = 'instagram'; break; 
+            case 'twitter': icon = 'twitter'; break;
+            case 'tumblr': icon = 'tumblr'; break; 
+            default: icon = 'drop';
+        }
+
+        $(`#${destination}_${id}`).prepend(getLogo(icon, true, `${destination}_${id}`));
+    }
+
 
     getIdsForStreamContainer = (streamContainerId) => {
         const articles = $(`#${streamContainerId}`).find('article');
@@ -19,12 +33,42 @@ if(window.location.href.startsWith("https://9gag.com/")){
         return (articleIds);
     }
 
-    const getLogo = (x, glow) => {
+    const getLogo = (x, glow, id) => {
         if(glow){
             switch(x) {
+                case 'drop': 
+                return(`
+                    <svg class="dropLogo" id="icon_${id}" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0)">
+                        <rect width="26" height="26" rx="3" fill="#121218"/>
+                        <g filter="url(#filter0_dd)">
+                        <path d="M18.1553 14.6947C18.1553 15.1619 18.2706 20.457 12.9245 20.457C7.50142 20.457 7.73219 14.6947 7.73219 14.6947C7.73219 11.6189 12.6937 5.23361 12.9245 5C13.1553 5.23361 18.1553 10.8012 18.1553 14.6947Z" fill="white"/>
+                        </g>
+                        </g>
+                        <defs>
+                        <filter id="filter0_dd" x="-2.26923" y="-5" width="30.4247" height="35.457" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                        <feOffset/>
+                        <feGaussianBlur stdDeviation="5"/>
+                        <feColorMatrix type="matrix" values="0 0 0 0 0.0685603 0 0 0 0 0.608795 0 0 0 0 1 0 0 0 1 0"/>
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+                        drop2<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                        <feOffset/>
+                        <feGaussianBlur stdDeviation="2.5"/>
+                        <feColorMatrix type="matrix"saveToStreamWithTitle values="0 0 0 0 0.58106 0 0 0 0 0.798909 0 0 0 0 1 0 0 0 0.8 0"/>
+                        <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow"/>
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow" result="shape"/>
+                        </filter>
+                        <clipPath id="clip0">
+                        <rect width="26" height="26" fill="white"/>
+                        </clipPath>
+                        </defs>
+                    </svg>
+                `)
                 case 'twitter': 
                     return(`
-                        <svg class="dropLogo" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="dropLogo" id="icon_${id}" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0)">
                             <rect width="26" height="26" rx="3" fill="#121218"/>
                             <g filter="url(#filter0_dd)">
@@ -54,7 +98,7 @@ if(window.location.href.startsWith("https://9gag.com/")){
                     `);
                 case 'tumblr': 
                     return(`
-                        <svg class="dropLogo" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="dropLogo" id="icon_${id}" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0)">
                             <rect width="26" height="26" rx="3" fill="#121218"/>
                             <g filter="url(#filter0_dd)">
@@ -82,39 +126,10 @@ if(window.location.href.startsWith("https://9gag.com/")){
                             </defs>
                         </svg>
                     `);
-                case 'drop': 
-                    return(`
-                        <svg class="dropLogo" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0)">
-                            <rect width="26" height="26" rx="3" fill="#121218"/>
-                            <g filter="url(#filter0_dd)">
-                            <path d="M18.1553 14.6947C18.1553 15.1619 18.2706 20.457 12.9245 20.457C7.50142 20.457 7.73219 14.6947 7.73219 14.6947C7.73219 11.6189 12.6937 5.23361 12.9245 5C13.1553 5.23361 18.1553 10.8012 18.1553 14.6947Z" fill="white"/>
-                            </g>
-                            </g>
-                            <defs>
-                            <filter id="filter0_dd" x="-2.26923" y="-5" width="30.4247" height="35.457" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-                            <feOffset/>
-                            <feGaussianBlur stdDeviation="5"/>
-                            <feColorMatrix type="matrix" values="0 0 0 0 0.0685603 0 0 0 0 0.608795 0 0 0 0 1 0 0 0 1 0"/>
-                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-                            <feOffset/>
-                            <feGaussianBlur stdDeviation="2.5"/>
-                            <feColorMatrix type="matrix" values="0 0 0 0 0.58106 0 0 0 0 0.798909 0 0 0 0 1 0 0 0 0.8 0"/>
-                            <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow"/>
-                            <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow" result="shape"/>
-                            </filter>
-                            <clipPath id="clip0">
-                            <rect width="26" height="26" fill="white"/>
-                            </clipPath>
-                            </defs>
-                        </svg>
-                    `)
+
                 case 'instagram': 
                     return(`
-                    <svg class="dropLogo" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="dropLogo" id="icon_${id}" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="26" height="26" rx="3" fill="#121218"/>
                         <g clip-path="url(#clip0)">
                         <g filter="url(#filter0_dd)">
@@ -146,9 +161,38 @@ if(window.location.href.startsWith("https://9gag.com/")){
             }
         } else {
             switch(x) {
+                case 'drop': 
+                return(`
+                    <svg class="dropLogo" id="icon_${id}" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0)">
+                        <rect width="26" height="26" rx="3" fill="#121218"/>
+                        <g filter="url(#filter0_d)">
+                        <path d="M18.1553 14.6947C18.1553 15.1619 18.2706 20.457 12.9245 20.457C7.50142 20.457 7.73219 14.6947 7.73219 14.6947C7.73219 11.6189 12.6937 5.23361 12.9245 5C13.1553 5.23361 18.1553 10.8012 18.1553 14.6947Z" fill="url(#paint0_linear)"/>
+                        </g>
+                        </g>
+                        <defs>
+                        <filter id="filter0_d" x="1.73077" y="-1" width="22.4247" height="27.457" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                        <feOffset/>
+                        <feGaussianBlur stdDeviation="3"/>
+                        <feColorMatrix type="matrix" values="0 0 0 0 0.176894 0 0 0 0 0.555523 0 0 0 0 1 0 0 0 1 0"/>
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+                        </filter>
+                        <linearGradient id="paint0_linear" x1="9.73077" y1="12.2807" x2="17.1519" y2="18.4986" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#5D70C8"/>
+                        <stop offset="1" stop-color="#A7FAE6"/>
+                        </linearGradient>
+                        <clipPath id="clip0">
+                        <rect width="26" height="26" fill="white"/>
+                        </clipPath>
+                        </defs>
+                    </svg>
+                `)
                 case 'twitter': 
                     return(`
-                        <svg class="dropLogo" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="dropLogo" id="icon_${id}" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0)">
                             <path d="M22.75 26H3.25C1.456 26 0 24.544 0 22.75V3.25C0 1.456 1.456 0 3.25 0H22.75C24.544 0 26 1.456 26 3.25V22.75C26 24.544 24.544 26 22.75 26Z" fill="#121218"/>
                             <g filter="url(#filter0_d)">
@@ -177,7 +221,7 @@ if(window.location.href.startsWith("https://9gag.com/")){
                     `);
                 case 'tumblr': 
                     return(`
-                        <svg class="dropLogo" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="dropLogo" id="icon_${id}" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0)">
                             <rect width="26" height="26" rx="3" fill="#121218"/>
                             <g filter="url(#filter0_d)">
@@ -204,38 +248,10 @@ if(window.location.href.startsWith("https://9gag.com/")){
                             </defs>
                         </svg>
                     `);
-                case 'drop': 
-                    return(`
-                        <svg class="dropLogo" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0)">
-                            <rect width="26" height="26" rx="3" fill="#121218"/>
-                            <g filter="url(#filter0_d)">
-                            <path d="M18.1553 14.6947C18.1553 15.1619 18.2706 20.457 12.9245 20.457C7.50142 20.457 7.73219 14.6947 7.73219 14.6947C7.73219 11.6189 12.6937 5.23361 12.9245 5C13.1553 5.23361 18.1553 10.8012 18.1553 14.6947Z" fill="url(#paint0_linear)"/>
-                            </g>
-                            </g>
-                            <defs>
-                            <filter id="filter0_d" x="1.73077" y="-1" width="22.4247" height="27.457" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-                            <feOffset/>
-                            <feGaussianBlur stdDeviation="3"/>
-                            <feColorMatrix type="matrix" values="0 0 0 0 0.176894 0 0 0 0 0.555523 0 0 0 0 1 0 0 0 1 0"/>
-                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
-                            </filter>
-                            <linearGradient id="paint0_linear" x1="9.73077" y1="12.2807" x2="17.1519" y2="18.4986" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#5D70C8"/>
-                            <stop offset="1" stop-color="#A7FAE6"/>
-                            </linearGradient>
-                            <clipPath id="clip0">
-                            <rect width="26" height="26" fill="white"/>
-                            </clipPath>
-                            </defs>
-                        </svg>
-                    `)
+
                 case 'instagram': 
                     return(`
-                        <svg class="dropLogo" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="dropLogo" id="icon_${id}" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="26" height="26" rx="3" fill="#121218"/>
                             <g clip-path="url(#clip0)">
                             <g filter="url(#filter0_d)">
@@ -276,38 +292,38 @@ if(window.location.href.startsWith("https://9gag.com/")){
                     <div class='drop-area-container'>
                         <div class="drop-area">
                             <div class="dropOptionContainer" id="stream_${id}">
-                                ${getLogo('drop')}
+                                ${getLogo('drop', false, `stream_${id}`)}
                                 <div>Stream</div>
                             </div>
                             <div class="dropOptionContainer" id="streamt_${id}">
-                                ${getLogo('drop')}
+                                ${getLogo('drop', false, `streamt_${id}`)}
                                 <div>with Title</div>
                             </div>
-                            <div class="dropOptionContainer" id="ig_${id}">
-                                ${getLogo('instagram')}
+                            <div class="dropOptionContainer" id="instagram_${id}">
+                                ${getLogo('instagram', false, `instagram_${id}`)}
                                 <div>Instagram</div>
                             </div>
                             <div class="dropOptionContainer" id="igStory_${id}">
-                                ${getLogo('instagram')}
+                                ${getLogo('instagram', false, `igStory_${id}`)}
                                 <div>Story</div>
                             </div>
                             <div class="dropOptionContainer" id="twitter_${id}">
-                                ${getLogo('twitter')}
+                                ${getLogo('twitter', false, `twitter_${id}`)}
                                 <div>Twitter</div>
                             </div>
                             <div class="dropOptionContainer" id="tumblr_${id}">
-                                ${getLogo('tumblr')}
+                                ${getLogo('tumblr', false, `tumblr_${id}`)}
                                 <div>Tumblr</div>
                             </div>
                         </div>
                     </div>
                 `)
-                $(`#stream_${id}`).bind('click', () => saveToStream(id));
-                $(`#streamt_${id}`).bind('click', () => saveToStreamWithTitle(id));
-                $(`#ig_${id}`).bind('click', () => saveForIg(id));
-                $(`#igStory_${id}`).bind('click', () => saveForIgStory(id));
-                $(`#twitter_${id}`).bind('click', () => saveForTwitter(id));
-                $(`#tumblr_${id}`).bind('click', () => saveForTumblr(id));
+                $(`#stream_${id}`).bind('click', () => saveToDestination(id, 'stream'));
+                $(`#streamt_${id}`).bind('click', () => saveToDestination(id, 'streamt'));
+                $(`#instagram_${id}`).bind('click', () => saveToDestination(id, 'instagram'));
+                $(`#igStory_${id}`).bind('click', () => saveToDestination(id, 'igStory'));
+                $(`#twitter_${id}`).bind('click', () => saveToDestination(id, 'twitter'));
+                $(`#tumblr_${id}`).bind('click', () => saveToDestination(id, 'tumblr'));
             }
         }); 
     }
@@ -328,9 +344,12 @@ if(window.location.href.startsWith("https://9gag.com/")){
         })
     });
     const endlessScrollSection = document.querySelector('#list-view-2');
-    observer.observe(endlessScrollSection, {
-        childList: true
-    })
+    if(endlessScrollSection){
+        observer.observe(endlessScrollSection, {
+            childList: true
+        })
+    }
+
 }
 
 ///////////////////////////////////////////////////////////////
