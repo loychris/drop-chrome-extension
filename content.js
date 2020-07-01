@@ -4,7 +4,7 @@
 if(window.location.href.startsWith("https://9gag.com/")){
 
     const saveToDestination = (id, destination) => { 
-        console.log(`Saving ${id} to Stream`);
+        console.log(`Saving ${id} to ${destination}`);
         $(`#${destination}_${id}`).css("border", "1px solid #ffffff");
         $(`#${destination}_${id}`).css("font-weight", "bold");
         $(`#${destination}_${id}`).css("color", "#ffffff");
@@ -21,6 +21,28 @@ if(window.location.href.startsWith("https://9gag.com/")){
         }
 
         $(`#${destination}_${id}`).prepend(getLogo(icon, true, `${destination}_${id}`));
+        $(`#${destination}_${id}`).bind('click', () => unSave(id, destination));
+    }
+
+    const unSave = (id, destination) => {
+        console.log(`Reoving ${id} from ${destination}`);
+        $(`#${destination}_${id}`).css("border", "1px solid hsla(0,0%,100%,.3)");
+        $(`#${destination}_${id}`).css("font-weight", "normal");
+        $(`#${destination}_${id}`).css("color", "#c0c0c0");
+        $(`#icon_${destination}_${id}`).remove();
+        let icon;
+        switch(destination){
+            case 'stream': 
+            case 'streamt': icon = 'drop';break; 
+            case 'instagram':
+            case 'igStory': icon = 'instagram'; break; 
+            case 'twitter': icon = 'twitter'; break;
+            case 'tumblr': icon = 'tumblr'; break; 
+            default: icon = 'drop';
+        }
+
+        $(`#${destination}_${id}`).prepend(getLogo(icon, false, `${destination}_${id}`));
+        $(`#${destination}_${id}`).bind('click', () => saveToDestination(id, destination));
     }
 
 
