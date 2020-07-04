@@ -3,7 +3,7 @@
 
 if(window.location.href.startsWith("https://9gag.com/")){
 
-    const saveToDestination = (id, destination) => { 
+    const saveToDestination = (id, destination, title) => { 
         console.log(`Saving ${id} to ${destination}`);
         $(`#${destination}_${id}`).css("border", "1px solid #ffffff");
         $(`#${destination}_${id}`).css("font-weight", "bold");
@@ -12,13 +12,26 @@ if(window.location.href.startsWith("https://9gag.com/")){
         let icon;
         switch(destination){
             case 'stream': 
-            case 'streamt': icon = 'drop';break; 
+            case 'streamWithTitle': icon = 'drop';break; 
             case 'instagram':
             case 'igStory': icon = 'instagram'; break; 
             case 'twitter': icon = 'twitter'; break;
             case 'tumblr': icon = 'tumblr'; break; 
             default: icon = 'drop';
         }
+        let requestObject = {
+            message: `save post with id: ${id} to ${destination}`,
+            id,
+            destination
+        }
+
+        if(destination === 'streamWithTitle'){
+            requestObject.title = title;
+        }
+
+        chrome.runtime.sendMessage(requestObject, function(response) {
+            console.log(response.farewell);
+          });
 
         $(`#${destination}_${id}`).prepend(getLogo(icon, true, `${destination}_${id}`));
         $(`#${destination}_${id}`).bind('click', () => unSave(id, destination));
@@ -33,7 +46,7 @@ if(window.location.href.startsWith("https://9gag.com/")){
         let icon;
         switch(destination){
             case 'stream': 
-            case 'streamt': icon = 'drop';break; 
+            case 'streamWithTitle': icon = 'drop';break; 
             case 'instagram':
             case 'igStory': icon = 'instagram'; break; 
             case 'twitter': icon = 'twitter'; break;
@@ -310,15 +323,17 @@ if(window.location.href.startsWith("https://9gag.com/")){
     const addDropOtions = (articleIds) => {
         articleIds.forEach(id => {
             if(id.startsWith('jsid-post')){
-                $(`#${id}`).children(".post-container").prepend(`
+                const article = $(`#${id}`);
+                const title = article.find('h1').text();
+                article.children(".post-container").prepend(`
                     <div class='drop-area-container'>
                         <div class="drop-area">
                             <div class="dropOptionContainer" id="stream_${id}">
                                 ${getLogo('drop', false, `stream_${id}`)}
                                 <div>Stream</div>
                             </div>
-                            <div class="dropOptionContainer" id="streamt_${id}">
-                                ${getLogo('drop', false, `streamt_${id}`)}
+                            <div class="dropOptionContainer" id="streamWithTitle_${id}">
+                                ${getLogo('drop', false, `streamWithTitle_${id}`)}
                                 <div>with Title</div>
                             </div>
                             <div class="dropOptionContainer" id="instagram_${id}">
@@ -340,22 +355,27 @@ if(window.location.href.startsWith("https://9gag.com/")){
                         </div>
                     </div>
                 `)
-                $(`#stream_${id}`).bind('click', () => saveToDestination(id, 'stream'));
-                $(`#streamt_${id}`).bind('click', () => saveToDestination(id, 'streamt'));
-                $(`#instagram_${id}`).bind('click', () => saveToDestination(id, 'instagram'));
-                $(`#igStory_${id}`).bind('click', () => saveToDestination(id, 'igStory'));
-                $(`#twitter_${id}`).bind('click', () => saveToDestination(id, 'twitter'));
-                $(`#tumblr_${id}`).bind('click', () => saveToDestination(id, 'tumblr'));
+                $(`#stream_${id}`).bind('click', () => saveToDestination(id, 'stream', title));
+                $(`#streamWithTitle_${id}`).bind('click', () => saveToDestination(id, 'streamWithTitle', title));
+                $(`#instagram_${id}`).bind('click', () => saveToDestination(id, 'instagram', title));
+                $(`#igStory_${id}`).bind('click', () => saveToDestination(id, 'igStory', title ));
+                $(`#twitter_${id}`).bind('click', () => saveToDestination(id, 'twitter', title ));
+                $(`#tumblr_${id}`).bind('click', () => saveToDestination(id, 'tumblr', title));
             }
         }); 
     }
 
+
+    //add drop Options to the first loaded articles 
     let initialIds = [];
     const firstArticles = $('article');
     $.each(firstArticles, (i, value) => {
         initialIds.push(value.id);
     });
     addDropOtions(initialIds);
+
+
+    // Add drop options to every post that will be added to endless scroll
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if(mutation.addedNodes.length){

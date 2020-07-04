@@ -14,7 +14,7 @@
         "default_title": "MemeDropExtension"
     },
     "background": {
-        "scripts": ["eventPage.js"],
+        "scripts": ["background.js"],
         "persistent": false
     },
     "content_scripts": [
